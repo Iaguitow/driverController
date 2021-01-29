@@ -1,0 +1,12 @@
+{
+  "name": "driverControl",
+  "displayName": "driverControl",
+  "expo": {
+    "name": "driverControl",
+    "slug": "driverControl",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
