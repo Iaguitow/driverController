@@ -7,6 +7,7 @@ import { Appbar } from 'react-native-paper';
 
 import globalLogin from "../classes/ClassGlobal.js";
 import ClassUtils from "../classes/ClassUtils.js"
+import DataWeekContext from "../classes/ModalContext.js";
 import CompoDriversWeek from "../components/CompoDriversWeek"
 
 export default function ManagerDriver() {
@@ -19,7 +20,7 @@ export default function ManagerDriver() {
   const [dateToday, ] = useState(new Date());
 
   function pullData() {
-    /*classManagerDriverDay.getManagerListDay(function (resultado) {
+    /*classManagerDriverDay.getManagerListWeek(function (resultado) {
       setDtData(resultado);
     });*/
   }
@@ -38,10 +39,9 @@ export default function ManagerDriver() {
     wait(3000).then(() => setRefreshing(false));
   }, []);
 
-
-
   return (
     <Root>
+      <DataWeekContext.Provider value={dtData, setDtData}>
       <LinearGradient style={{ flex: 1 }} colors={['#182834', '#48D1CC']}>
         
         <Appbar.Header style={{ backgroundColor: 'transparent', borderRadius: 0, height: 60 }}>
@@ -60,6 +60,7 @@ export default function ManagerDriver() {
           <CompoDriversWeek/>
         </ScrollView >
       </LinearGradient>
+      </DataWeekContext.Provider>
     </Root>
   );
 }
