@@ -9,8 +9,15 @@ import toasted from '../components/CompoToast';
 const DialogModalDay = () => {
   
   const { value, setValue } = React.useContext(DialogContext);
+  const { dtData, setDtData } = React.useContext(DialogContext);
   const [dateToday, setDate] = React.useState(new Date());
   const [load, setLoad] = React.useState(false);
+
+  function pullData() {
+    classManagerDriverDay.getManagerListDay(function (resultado) {
+      setDtData(resultado);
+    });
+  }
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
 
@@ -58,10 +65,11 @@ const DialogModalDay = () => {
                 const currentDateFormated = (dateToday.getFullYear()+"-"+("0"+dateToday.getMonth()+1).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
                 classManagerDriverDay.insertNewDay(currentDateFormated, function (resultado) {
                   if (resultado.toString().includes('Update')) {
-                    setValue(false);
                     toasted.showToast('Sucess');
+                    pullData();
                     setLoad(false);
-
+                    setValue(false);
+                    
                   } else if (resultado.toString().includes('Error')) {
                     alert("Error, Register a Week for this day. Or try another day. Or this day already exist!");
                     setLoad(false);

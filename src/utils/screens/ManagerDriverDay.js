@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Root } from "native-base";
-import { ScrollView, LogBox } from 'react-native';
+import { ScrollView, LogBox, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Appbar } from 'react-native-paper';
 //import useForceUpdate from 'use-force-update';
@@ -12,6 +12,7 @@ import DialogDay from '../components/CompoModalDay';
 import DialogDayWeek from '../components/CompoModalWeek';
 import DialogContext from "../classes/ModalContext.js";
 import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import ClassUtils from "../classes/ClassUtils.js"
 
 export default function ManagerDriver() {
   
@@ -30,23 +31,21 @@ export default function ManagerDriver() {
     });
   }
 
-  const hours = dateToday.getHours();
-
-  const houToday = () =>{
-    switch(true){
-      case hours >= 1 && hours < 12:
-        return "Good Morning";
-        break;
-      case hours >= 12 && hours <= 18:
-        return "Good Afternoon";
-        break;
-      case hours >= 19 && hours <= 24:
-        return "Good Evening";
-        break;
-      default:
-        return "Good Morning";
-    }
+  const wait = (timeout) => {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
   }
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    pullData();
+    wait(3000).then(() => setRefreshing(false));
+  }, []);
+
+
 
   return (
     <Root>
@@ -55,14 +54,13 @@ export default function ManagerDriver() {
           
           <Appbar.Header style={{ backgroundColor: 'transparent', borderRadius: 0, height: 50 }}>
             <Appbar.Content style={{alignItems:'center'}} title={globalLogin.isLogInName} 
-            subtitle={houToday().toString()+' - Today: '+dateToday.toString().substring(4,10)} 
+            subtitle={ClassUtils.getDayGreeting().toString()+' - Today: '+dateToday.toString().substring(4,10)} 
             titleStyle={{ color: 'white' }} subtitleStyle={{ color: 'white' }} />
           </Appbar.Header>
 
-          <ScrollView onMomentumScrollEnd={()=>{
-            
-            pullData();
-          }}
+          <ScrollView refreshControl={
+            <RefreshControl tintColor={'white'} title={'UPDATING...'} titleColor={'white'} refreshing={refreshing} onRefresh={onRefresh} />
+          }
           scrollEventThrottle={100} 
           scrollEnabled={true} 
           style={{ backgroundColor: 'transparent', flex: 0 }}

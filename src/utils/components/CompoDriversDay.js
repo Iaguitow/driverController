@@ -118,8 +118,9 @@ const ListDriversDay = () => {
                       mode="dropdown"
                       iosIcon={<Icon name="arrow-down" style={{color: '#48D1CC'}}/>}
                       style={{ width: (Platform.OS === 'ios')?100:50, marginLeft:(Platform.OS === 'ios')?-145:0 }}
-                      placeholder="Select Route"
+                      placeholder="Select the Route"
                       placeholderStyle={{ color: "#bfc6ea" }}
+                      textStyle={{color:'#48D1CC', fontSize:16}}
                       placeholderIconColor="#007aff"
                       selectedValue={dts.KeyRouteDriver!=null?dts.KeyRouteDriver.toString():null}
                       onValueChange={(idRouteSelected) => {

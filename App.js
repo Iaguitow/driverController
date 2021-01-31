@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 // Packages
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {navigationRef} from './src/utils/classes/RootNavigation';
 
 // Authentication Views
 import Login from './src/utils/screens/Login';
@@ -33,11 +34,11 @@ export default class App extends React.Component {
 
   render() {
     if (!this.state.isReady) {
-      return <AppLoading />;
+      return null;
     }
     
     return (
-      <NavigationContainer independent = {true}>
+      <NavigationContainer ref={navigationRef} independent = {true}>
       <Stack.Navigator initialRouteName="Login"   screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />

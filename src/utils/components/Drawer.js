@@ -1,6 +1,6 @@
 //FEATURES
 import React, { useContext } from 'react';
-import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, Alert} from 'react-native';
 import { createDrawerNavigator,  DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator} from '@react-navigation/stack';
 import { Drawer } from 'react-native-paper';
@@ -13,6 +13,8 @@ import ManagerDriverDay from '../screens/ManagerDriverDay';
 import DriverWeekList from '../screens/DriverWeekList';
 import Register from '../screens/Register';
 import Configuration from '../screens/Configuration';
+import Login from '../screens/Login';
+import * as RootNavigation from '../classes/RootNavigation';
 
 import globalLogin from "../classes/ClassGlobal.js"
 
@@ -37,6 +39,7 @@ const Screens = ({navigation, style}) => {
             <Stack.Screen name="DriverWeeekList" component={DriverWeekList}/>
             <Stack.Screen name="Register" component={Register}/>
             <Stack.Screen name="Configuration" component={Configuration}/>
+            <Stack.Screen name="Login" component={Login}/>
         </Stack.Navigator>   
      </Animated.View>   
     );
@@ -91,7 +94,30 @@ const DrawerContent = props => {
                         label="Logout"
                         labelStyle={{ color: 'white', marginLeft:-16,fontSize:14 }}
                         icon={() => <AntDesign name="logout" color="white" size={22} />}
-                        onPress={() => alert('Are your sure to logout?')}
+                        onPress={() => 
+                          {
+                            Alert.alert(
+                              'Warning',
+                              'Are you sure about logout?',
+                              [
+                                {
+                                  text: 'Cancel',
+                                  onPress: () => {},
+                                  style: 'cancel',
+                                },
+                                {text: 'Yes', onPress: () => {
+                                  RootNavigation.navigate('Login');
+                                  globalLogin.isLogInID = null;
+                                  globalLogin.isLogInEmail = null;
+                                  globalLogin.isLogInName = null;
+                                  globalLogin.isLogInCategory = null;
+                                }},
+                              ],
+                              {cancelable: false},
+                            );
+                            
+                          }
+                      }
                     />
                 </View>
             </Drawer.Section>

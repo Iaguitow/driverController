@@ -57,8 +57,25 @@ class exportData {
                 UTI: 'com.microsoft.excel.xlsx'
             });
         });
+    }
 
+    getDayGreeting(){
 
+        const hours = new Date().getHours();
+        
+        switch(true){
+        case hours >= 1 && hours < 12:
+            return "Good Morning";
+            break;
+        case hours >= 12 && hours <= 18:
+            return "Good Afternoon";
+            break;
+        case hours >= 19 && hours <= 24:
+            return "Good Evening";
+            break;
+        default:
+            return "Good Morning";
+        }
     }
 }
 
