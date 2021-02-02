@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import classManagerDriverWeek from "../classes/ClassDBDriversWeek.js"
 import DialogContext from "../classes/ModalContext.js";
 import toasted from '../components/CompoToast';
 
@@ -18,7 +18,7 @@ const DialogModalWeek = () => {
   const [load, setLoad] = React.useState(false);
 
   function pullData() {
-    classManagerDriverDay.getManagerNextWeek(function(resultado){
+    classManagerDriverWeek.getManagerNextWeek(function(resultado){
       setDateStart(new Date(resultado[0].dtStart));
       setDateEnd(new Date(resultado[0].dtEnd));
       setweekNumber(resultado[0].weekNumber);
@@ -123,7 +123,7 @@ const DialogModalWeek = () => {
                     const currentDateStart = (dateStart.getFullYear() + "-" + ("0" + dateStart.getMonth() + 1).slice(-2) + "-" + ("0" + dateStart.getDate()).slice(-2));
                     const currentDateEnd = (dateEnd.getFullYear() + "-" + ("0" + dateEnd.getMonth() + 1).slice(-2) + "-" + ("0" + dateEnd.getDate()).slice(-2));
 
-                    classManagerDriverDay.insertNewWeek(currentDateStart,currentDateEnd,weekNumber, function (resultado) {
+                    classManagerDriverWeek.insertNewWeek(currentDateStart,currentDateEnd,weekNumber, function (resultado) {
                       if (resultado.toString().includes('Update')) {
                         setValueWeek(false);
                         toasted.showToast('Sucess');

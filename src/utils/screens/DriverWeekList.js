@@ -7,8 +7,9 @@ import { Appbar } from 'react-native-paper';
 
 import globalLogin from "../classes/ClassGlobal.js";
 import ClassUtils from "../classes/ClassUtils.js"
-import DataWeekContext from "../classes/ModalContext.js";
-import CompoDriversWeek from "../components/CompoDriversWeek"
+import DataWeekContext from "../classes/ModalContextWeek.js";
+import CompoDriversWeek from "../components/CompoDriversWeek";
+import ManagerListDriverWeek from "../classes/ClassDBDriversWeek.js"
 
 export default function ManagerDriver() {
   
@@ -20,9 +21,9 @@ export default function ManagerDriver() {
   const [dateToday, ] = useState(new Date());
 
   function pullData() {
-    /*classManagerDriverDay.getManagerListWeek(function (resultado) {
+    ManagerListDriverWeek.getManagerListWeek(function (resultado) {
       setDtData(resultado);
-    });*/
+    });
   }
 
   const wait = (timeout) => {
@@ -41,7 +42,7 @@ export default function ManagerDriver() {
 
   return (
     <Root>
-      <DataWeekContext.Provider value={dtData, setDtData}>
+      <DataWeekContext.Provider value={{dtData, setDtData}}>
       <LinearGradient style={{ flex: 1 }} colors={['#182834', '#48D1CC']}>
         
         <Appbar.Header style={{ backgroundColor: 'transparent', borderRadius: 0, height: 60 }}>

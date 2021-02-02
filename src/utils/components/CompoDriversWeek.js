@@ -4,8 +4,9 @@ import { List, FAB, Switch, ProgressBar } from 'react-native-paper';
 import { Picker, Icon } from "native-base";
 import { useFocusEffect } from '@react-navigation/native';
 
-import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import ManagerListDriverWeek from "../classes/ClassDBDriversWeek.js"
 import ClassUtils from "../classes/ClassUtils.js"
+import DataWeekContext from "../classes/ModalContextWeek.js";
 
 const CompoDriversWeek = () => {
 
@@ -17,15 +18,15 @@ const CompoDriversWeek = () => {
 
     const [dtDataRoute, setDtDataRoute] = React.useState('release_data');
     function pullDataRoute() {
-        classManagerDriverDay.getManagerListRoutes(function (resultado) {
+        ManagerListDriverWeek.getManagerListRoutes(function (resultado) {
             setDtDataRoute(resultado);
         });
     }
 
-    const [dtData, setDtData] = React.useState('release_data');
-    //const { dtData, setDtData } = React.useContext(DialogContext);
+    //const [dtData, setDtData] = React.useState('release_data');
+    const { dtData, setDtData } = React.useContext(DataWeekContext);
     function pullData() {
-        classManagerDriverDay.getManagerListWeek(function (resultado) {
+        ManagerListDriverWeek.getManagerListWeek(function (resultado) {
             setDtData(resultado);
         });
     }
@@ -93,7 +94,7 @@ const CompoDriversWeek = () => {
                     <List.Section
                         title={weekObj.WeekDate}
                         titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 16 }}
-                        style={{ backgroundColor: 'rgba(178,178,178,0.5)', borderRadius: 30, marginTop: 0, width: '95%', alignSelf: 'center' }}
+                        style={{ backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 0, marginTop: 0, width: '95%', alignSelf: 'center' }}
                         key={index}
                     >
                         <FAB style={styles.fab} color='white' small={false} icon="database-export"
@@ -114,7 +115,7 @@ const CompoDriversWeek = () => {
 
                                     <List.Accordion
                                         theme={{ colors: { primary: '#48D1CC' } }}
-                                        style={{ borderTopColor: 'white', borderTopWidth: 3 }}
+                                        style={{ borderTopColor: 'rgba(0,0,0,0.3)', borderTopWidth: 3 }}
                                         title={daysObj.dayDate + ' - '+daysObj.driverAmount+' WORKED'}
                                         titleStyle={{ color: 'black', fontSize: 14 }}
                                         left={props => <List.Icon {...props} icon="account-hard-hat" />}
@@ -123,9 +124,10 @@ const CompoDriversWeek = () => {
                                         {daysObj.items.map((item, index) => {
                                             return (
                                                 <List.Item
-                                                    style={{ borderTopColor: 'white', borderTopWidth: 1 }}
+                                                    style={{ borderTopColor: 'rgba(0,0,0,0.3)', borderTopWidth: 1 }}
                                                     title={item.name}
                                                     key={index}
+                                                    onPress={() => {ClassUtils.callNumber(item.phonenumber)} }
 
                                                     left={props => <Switch {...props} color={item.worked == 'S' ? '#48D1CC' : 'red'}
                                                     value={item.worked != null ? true : false} />}

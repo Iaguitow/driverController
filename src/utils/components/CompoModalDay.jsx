@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Paragraph, Dialog, Portal, Provider, Divider, Text } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import classManagerDriverDay from "../classes/ClassDBDriversDay.js"
 import DialogContext from "../classes/ModalContext.js";
 import toasted from '../components/CompoToast';
 

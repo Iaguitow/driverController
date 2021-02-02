@@ -6,7 +6,7 @@ import { Picker, Icon } from "native-base";
 
 import toasted from '../components/CompoToast';
 import globalLogin from "../classes/ClassGlobal.js"
-import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import classManagerDriverDay from "../classes/ClassDBDriversDay.js"
 import ClassUtils from "../classes/ClassUtils.js"
 import DialogContext from "../classes/ModalContext.js";
 
@@ -19,9 +19,11 @@ const ListDriversDay = () => {
     });
   }
 
-  const routeMapped = () => {return dtDataRoute.map((route,index) => {
-    return(<Picker.Item key={index} label={route.routename} value={route.keyroute.toString()} />)
-  })};
+  const routeMapped = () => {
+    return dtDataRoute.map((route, index) => {
+      return (<Picker.Item key={index} label={route.routename} value={route.keyroute.toString()} />)
+    })
+  };
 
   //const [dtData, setDtData] = useState('release_data');
   const { dtData, setDtData } = React.useContext(DialogContext);
@@ -80,13 +82,13 @@ const ListDriversDay = () => {
           <List.Section
             title={obj.dayDate}
             titleStyle={{ color: 'black', fontWeight: 'bold', fontSize: 16 }}
-            style={{ backgroundColor: 'rgba(178,178,178,0.5)', marginTop: 0, borderRadius: 30, width: '95%', alignSelf: 'center' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.2)', marginTop: 0, borderRadius: 0, width: '95%', alignSelf: 'center' }}
             key={index}
             id={obj.keySectionDay}  >
 
             <Button mode="contained" style={{ borderRadius: 70, width: 40, backgroundColor: '#48D1CC', marginLeft: '80%' }}>
-              <Text style={{ fontWeight: 'bold', marginRight: 50 }}> {obj.driverAmount!=null?obj.driverAmount:0} </Text> </Button>
-            <FAB style={styles.fab} color='white' small={false} icon="database-export" onPress={() => {ClassUtils.export(obj.keySectionDay);}} />
+              <Text style={{ fontWeight: 'bold', marginRight: 50 }}> {obj.driverAmount != null ? obj.driverAmount : 0} </Text> </Button>
+            <FAB style={styles.fab} color='white' small={false} icon="database-export" onPress={() => { ClassUtils.export(obj.keySectionDay); }} />
 
             <List.Accordion
               title="DRIVERS"
@@ -97,10 +99,10 @@ const ListDriversDay = () => {
 
               {obj.data.map((dts, index) => {
                 return (
-                  <List.Item key={index} id={dts.KeyItemDriver} title={dts.workedWeekDays+" - "+dts.name} 
-                    titleStyle={{ color: 'black', fontSize: 14, marginLeft:-20 }}
-                    style={{ borderTopColor: 'white', borderTopWidth: 1 }}
-                    onPress={() => {ClassUtils.callNumber(dts.phonenumber)} }
+                  <List.Item key={index} id={dts.KeyItemDriver} title={dts.workedWeekDays + " - " + dts.name}
+                    titleStyle={{ color: 'black', fontSize: 14, marginLeft: -20 }}
+                    style={{ borderTopColor: 'rgba(0,0,0,0.3)', borderTopWidth: 1 }}
+                    onPress={() => { ClassUtils.callNumber(dts.phonenumber) }}
 
                     left={props => <Switch {...props} color={dts.worked == 'S' ? '#48D1CC' : 'red'}
                       onValueChange={() => {
@@ -116,27 +118,28 @@ const ListDriversDay = () => {
 
                     right={props => <Picker {...props}
                       mode="dropdown"
-                      iosIcon={<Icon name="arrow-down" style={{color: '#48D1CC'}}/>}
-                      style={{ width: (Platform.OS === 'ios')?100:50, marginLeft:(Platform.OS === 'ios')?-145:0 }}
+                      iosIcon={<Icon name="arrow-down" style={{ color: '#48D1CC' }} />}
+                      style={{ width: (Platform.OS === 'ios') ? 100 : 50, marginLeft: (Platform.OS === 'ios') ? -145 : 0 }}
                       placeholder="Select the Route"
                       placeholderStyle={{ color: "#bfc6ea" }}
-                      textStyle={{color:'#48D1CC', fontSize:16}}
+                      textStyle={{ color: '#48D1CC', fontSize: 16 }}
                       placeholderIconColor="#007aff"
-                      selectedValue={dts.KeyRouteDriver!=null?dts.KeyRouteDriver.toString():null}
+                      selectedValue={dts.KeyRouteDriver != null ? dts.KeyRouteDriver.toString() : null}
                       onValueChange={(idRouteSelected) => {
-                        classManagerDriverDay.setRouteDriver(dts.KeyItemDriver, idRouteSelected,function (resultado) {
+                        classManagerDriverDay.setRouteDriver(dts.KeyItemDriver, idRouteSelected, function (resultado) {
                           if (resultado.toString().includes("Update")) {
                             pullData();
                             toasted.showToast('Sucess');
                           } else {
                             alert(resultado.toString());
                           }
-                      });}}
+                        });
+                      }}
                     >
                       {routeMapped()}
                     </Picker>}
-                    /*right={props => <Text {...props} style={{ color: '#48D1CC', fontSize: 18, marginTop: 5 }} > {dts.workedWeekDays} </Text>}
-                    onPress={() => {call modal}}*/
+                  /*right={props => <Text {...props} style={{ color: '#48D1CC', fontSize: 18, marginTop: 5 }} > {dts.workedWeekDays} </Text>}
+                  onPress={() => {call modal}}*/
                   >
                   </List.Item>
                 )

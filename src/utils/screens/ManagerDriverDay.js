@@ -6,12 +6,12 @@ import { Appbar } from 'react-native-paper';
 //import useForceUpdate from 'use-force-update';
 
 import ListDriversPerDay from '../components/CompoDriversDay';
-import AddweekandDay from '../components/compoFabGroup';
+import AddweekandDay from '../components/CompoFabGroupAddWeekAndDay';
 import globalLogin from "../classes/ClassGlobal.js";
 import DialogDay from '../components/CompoModalDay';
 import DialogDayWeek from '../components/CompoModalWeek';
 import DialogContext from "../classes/ModalContext.js";
-import classManagerDriverDay from "../classes/ClassListDriversDay.js"
+import classManagerDriverDay from "../classes/ClassDBDriversDay.js"
 import ClassUtils from "../classes/ClassUtils.js"
 
 export default function ManagerDriver() {

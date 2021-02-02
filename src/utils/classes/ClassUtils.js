@@ -2,7 +2,8 @@ import XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Linking, Alert, Platform } from 'react-native';
-import classManagerDay from './ClassListDriversDay'
+import classManagerDay from './ClassDBDriversDay'
+import classManagerWeek from './ClassDBDriversWeek'
 
 class exportData {
 
@@ -35,8 +36,6 @@ class exportData {
                 return null;
             }
 
-            
-
             var data = JSON.parse(resultado);
 
             var ws = XLSX.utils.json_to_sheet(data);
@@ -63,7 +62,7 @@ class exportData {
 
     exportWeek(idWorkWeek) {
 
-        classManagerDay.getListDriversWorkedWeek(idWorkWeek, function (resultado) {
+        classManagerWeek.getListDriversWorkedWeek(idWorkWeek, function (resultado) {
 
             if (resultado[0] == 'E') {
                 alert(resultado);
