@@ -15,11 +15,15 @@ const CompoUserRegisterList = () => {
   }, [])
 
   const { dsData, setDsData } = React.useContext(ModalContextRegister);
+  const { CopydsData, setCopyDsData } = React.useContext(ModalContextRegister);
+  const { FilterdsData, setFilterdsData } = React.useContext(ModalContextRegister);
   //const [dsData, setDsData]  = React.useState('WITHOUT DATA');
 
   function pullData(){
     ManagerUsers.getListPeoples(function(resultado){
       setDsData(resultado);
+      setCopyDsData(resultado);
+      setFilterdsData(resultado);
     });
   }
 
@@ -33,7 +37,6 @@ const CompoUserRegisterList = () => {
     return (<ProgressBar indeterminate={true} color={'#48D1CC'} />);
   } 
   
-
   const arrayPeople = [];
   for (var i = 0, ii = dsData.length; i < ii; i++) {
     arrayPeople.push({
@@ -64,7 +67,8 @@ const CompoUserRegisterList = () => {
             width: '95%', alignSelf: 'center'
           }}
 
-          left={props => <Avatar.Image {...props} size={60} source={require('../images/face-Img.jpg')} />}
+          left={props => <Avatar.Image {...props} style={{backfaceVisibility:'false',backgroundColor:'transparent'}} 
+          size={60} source={require('../images/face-Img.jpg')} />}
 
           right={props => <IconButton {...props} size={35}
             color={'#48D1CC'} icon="phone-in-talk" onPress={() => { ClassUtils.callNumber(obj.phonenumber); }} />}

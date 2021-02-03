@@ -10,24 +10,30 @@ import ClassUtils from "../classes/ClassUtils.js"
 import RegisterUserContext from "../classes/ModalContextRegister.js";
 import ClassDBUserRegister from "../classes/ClassDBUserRegister.js"
 import CompoUserRegisterList from "../components/CompoUserRegisterList.js";
+import AddUserAndRoute from "../components/CompoFabGroupAddUserAndRoute";
+import ModalAddUser from "../components/CompoModalUser";
 
 export default function ManagerDriver() {
 
+  //STATES FOR MODAL
+  const [userModal, setUserModal] = useState(false);
+  const [routeModal, setRouteModal] = useState(false);
+
+  //STATES FOR DATA
   const [dsData, setDsData] = useState('');
+  const [CopydsData, setCopyDsData] = useState('');
+  const [FilterdsData, setFilterdsData] = useState('');
   const [dateToday, ] = useState(new Date());
 
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => {
-    
-    const filterList = dsData.filter((items) => {
+    const filterList = FilterdsData.filter((items) => {
       const itemFilter = items.name? items.name.toUpperCase(): ''.toUpperCase();
       const newText = query.toUpperCase();
-      console.log(itemFilter.indexOf(newText));
-      return itemFilter.indexOf(newText)> -1;
+      return itemFilter.indexOf(newText)!== -1;
     });
-    
     setDsData(filterList);
-    setSearchQuery(query);
+    setSearchQuery(query);  
   }
     
   function pullData() {
@@ -52,7 +58,10 @@ export default function ManagerDriver() {
 
   return (
     <Root>
-      <RegisterUserContext.Provider value={{dsData, setDsData}}>
+      <RegisterUserContext.Provider value={{dsData, setDsData, CopydsData, 
+        setCopyDsData, FilterdsData, setFilterdsData,
+        userModal, setUserModal, routeModal, setRouteModal}}>
+
       <LinearGradient style={{ flex: 1 }} colors={['#182834', '#48D1CC']}>
         
         <Appbar.Header style={{ backgroundColor: 'transparent', borderRadius: 0, height: 60 }}>
@@ -63,20 +72,19 @@ export default function ManagerDriver() {
           >
           </Appbar.Content>
         </Appbar.Header>
-
+        
         <Searchbar
             placeholder="Search"
             onChangeText={onChangeSearch}
             value={searchQuery}
             onKeyPress={({ nativeEvent }) => {
               if (nativeEvent.key === 'Backspace') {
-                setSearchQuery(searchQuery.slice(0,-1));
-                onChangeSearch(searchQuery);
+                setFilterdsData(CopydsData);
               }
             }}
             style={{marginBottom:20, width:'95%', alignSelf: 'center'}}
         />
-
+        
         <ScrollView refreshControl={
           <RefreshControl tintColor={'white'} title={'UPDATING...'} titleColor={'white'} refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -86,6 +94,8 @@ export default function ManagerDriver() {
         >
           <CompoUserRegisterList/>
         </ScrollView >
+        <AddUserAndRoute/>
+        <ModalAddUser/>
       </LinearGradient>
       </RegisterUserContext.Provider>
     </Root>
