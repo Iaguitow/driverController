@@ -58,6 +58,7 @@ export default function ManagerDriver() {
 
   return (
     <Root>
+      
       <RegisterUserContext.Provider value={{dsData, setDsData, CopydsData, 
         setCopyDsData, FilterdsData, setFilterdsData,
         userModal, setUserModal, routeModal, setRouteModal}}>
@@ -95,7 +96,9 @@ export default function ManagerDriver() {
           <CompoUserRegisterList/>
         </ScrollView >
         <AddUserAndRoute/>
+
         <ModalAddUser/>
+        
       </LinearGradient>
       </RegisterUserContext.Provider>
     </Root>

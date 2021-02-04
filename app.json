@@ -8,6 +8,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "android":{"softwareKeyboardLayoutMode": "pan"}
+    "android":{"softwareKeyboardLayoutMode": "resize"}
   }
 }

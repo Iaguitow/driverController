@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import {View, KeyboardAvoidingView, StyleSheet, Image, Animated} from 'react-native';
+import {View, KeyboardAvoidingView, StyleSheet, Image, Animated, Platform} from 'react-native';
 import { Item, Input, Button, Icon, Text } from 'native-base';
 
 import globalLogin from "../classes/ClassGlobal.js"
@@ -64,8 +64,7 @@ export default function login({ navigation }) {
   },[]);
 
     return(
-      <KeyboardAvoidingView style={styles.backgroundStyle}>
-
+      <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={styles.backgroundStyle}>
         {
           ////////***** LOGO VIEW BLOCK *****////////
         }
