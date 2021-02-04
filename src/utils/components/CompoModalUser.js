@@ -16,12 +16,19 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import ClassDBUserRegister from "../classes/ClassDBUserRegister.js"
 import ModalContextRegister from "../classes/ModalContextRegister.js";
+import ClassUtils from "../classes/ClassUtils.js"
 import toasted from '../components/CompoToast';
 
 const ModalUserRegister = () => {
 
     const { userModal, setUserModal } = React.useContext(ModalContextRegister)
+    const { dsData, setDsData } = React.useContext(ModalContextRegister);
     const [load, setLoad] = React.useState(false);
+
+    const [valueName, setValueName] = React.useState("");
+    const [valueEmail, setValueEmail] = React.useState("");
+    const [valuePassword, setValuePassword] = React.useState("");
+    const [phoneNumber, setValuePhone] = React.useState("");
 
     const [valueActive, setValueActive] = React.useState('Active(Off):');
     const [isSwitchOn, setIsSwitchOn] = React.useState(false);
@@ -30,6 +37,7 @@ const ModalUserRegister = () => {
         !isSwitchOn?setValueActive('Active(On):'):setValueActive('Active(Off):')
     };
 
+    const [keyCategory, setKeyCategory] = React.useState("2");
     const [dtDataCategory, setdtDataCategory] = React.useState('release_data');
     function pullDataCategory() {
         ClassDBUserRegister.getManagerListCategory(function (resultado) {
@@ -45,17 +53,17 @@ const ModalUserRegister = () => {
     };
 
     function pullData() {
-        /*classManagerDriverWeek.getManagerNextWeek(function(resultado){
-         });*/
+        ClassDBUserRegister.getListPeoples(function(resultado){
+            setDsData(resultado);
+         });
     }
 
     useFocusEffect(
         React.useCallback(() => {
-            pullData();
             pullDataCategory();
         }, [])
     );
-
+    
     return (
         <Provider>
             <Portal>
@@ -64,9 +72,13 @@ const ModalUserRegister = () => {
                     <Divider />
 
                     <Dialog.Content>
+                        <View>
                         <Paragraph>Personal Data:</Paragraph>
                         <TextInput
                             label={'Name: '}
+                            type="text"
+                            defaultValue={valueName}
+                            onEndEditing={(textName) => {setValueName(textName.nativeEvent.text);}}
                             style={{ backgroundColor: 'transparent', width: "100%" }}
                             theme={{
                                 colors: {
@@ -75,7 +87,25 @@ const ModalUserRegister = () => {
                                 }
                             }} />
                         <TextInput
-                            label={'Email: '}
+                            label={'E-mail: '}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            defaultValue={valueEmail}
+                            onEndEditing={(textEmail) => {setValueEmail(textEmail.nativeEvent.text);}}
+                            style={{ backgroundColor: 'transparent', width: "100%" }}
+                            theme={{
+                                colors: {
+                                    placeholder: 'black', text: 'black',
+                                    primary: '#48D1CC', underlineColor: '#48D1CC'
+                                }
+                            }} />
+                        <TextInput
+                            label={'Phone Number: '}
+                            type="text"
+                            defaultValue={phoneNumber}
+                            onEndEditing={(textPhone) => {setValuePhone(textPhone.nativeEvent.text);}}
+                            keyboardType="numeric"
+                            maxLength={11}
                             style={{ backgroundColor: 'transparent', width: "100%" }}
                             theme={{
                                 colors: {
@@ -86,6 +116,8 @@ const ModalUserRegister = () => {
                         <View style={{ flexDirection: 'row', padding: 0 }}>
                             <TextInput
                                 label={'Password: '}
+                                defaultValue={valuePassword}
+                                onEndEditing={(textPassword) => {setValuePassword(textPassword.nativeEvent.text);}}
                                 maxLength={15}
                                 style={{ backgroundColor: 'transparent', width: "50%" }}
                                 theme={{
@@ -122,11 +154,12 @@ const ModalUserRegister = () => {
                                 placeholderStyle={{ color: "black" }}
                                 textStyle={{ color: 'black', fontSize: 16 }}
                                 placeholderIconColor="#007aff"
-                                selectedValue={'2'}
-                                onValueChange={(idCategorySelected) => {}}
+                                selectedValue={keyCategory}
+                                onValueChange={(idCategorySelected) => {setKeyCategory(idCategorySelected.toString());}}
                             >
                                 {dtDataCategory}
                             </Picker>
+                        </View>
                         </View>
                     </Dialog.Content>
 
@@ -139,8 +172,37 @@ const ModalUserRegister = () => {
                             loading={load} mode="contained"
                             onPress={() => {
                                 setLoad(true);
-                                setUserModal(false);
-                                setLoad(false);
+                                if(ClassUtils.validateEmail(valueEmail)){
+                                    ClassDBUserRegister.insertNewUser(
+                                        valueName,
+                                        valueEmail,
+                                        valuePassword,
+                                        keyCategory,
+                                        !isSwitchOn?'S':'N',
+                                        phoneNumber, function(resultado) {
+                                                if(resultado.toString().includes("Sucessfully")){
+                                                    pullData();
+                                                    setValueName("");
+                                                    setValueEmail("");
+                                                    setValuePassword("");
+                                                    setValuePhone("");
+                                                    setValueActive('Active(Off):');
+                                                    setIsSwitchOn(false);
+                                                    setKeyCategory("2");
+                                                    setUserModal(false);
+                                                    toasted.showToast("Sucess");
+                                                    
+                                                }else{
+                                                    alert(resultado);
+
+                                                }
+                                            setLoad(false);
+                                        });
+                                }
+                                else{
+                                    alert("Invalid E-mail, try another one.");
+                                    setLoad(false);
+                                }
                             }}
                         >
                             SAVE

@@ -101,12 +101,14 @@ export default function login({ navigation }) {
 
         <Item style={{marginTop:10}}>
           <Icon name='person-outline' style={{color: 'white'}}/>
-          <Input style={{color: 'white'}} placeholder="Email" placeholderTextColor="white" onChangeText={email => {SetEmail(email)}} value={email}/>
+          <Input style={{color: 'white'}} placeholder="Email" placeholderTextColor="white" 
+          onChangeText={email => {SetEmail(email)}} value={email} autoCapitalize="none"/>
         </Item>
 
         <Item style={{marginTop:10,marginBottom:10}}>
           <Icon name='md-lock-closed-outline' style={{color: 'white'}}/>
-          <Input style={{color: 'white'}} secureTextEntry={true} placeholder="Password" placeholderTextColor="white" onChangeText={password => {SetPass(password)}} value={password}/>
+          <Input style={{color: 'white'}} secureTextEntry={true} placeholder="Password" 
+          placeholderTextColor="white" onChangeText={password => {SetPass(password)}} value={password}/>
         </Item>
 
         <Button style={{backgroundColor:'#48D1CC',width:300}} iconLeft onPress={() => {
@@ -128,11 +130,9 @@ export default function login({ navigation }) {
           <Text style={{fontWeight:'bold', marginRight: 100}}>Sign In</Text>
         </Button>
         <Text style={{color: '#48D1CC', marginTop: 5}}>Forgot? Cick Here!</Text>
+        <Text style={{color: 'white',marginTop:10}}>All rights reserved - 2021</Text>
 
         </Animated.View>
-
-          <Text style={{color: 'white',marginBottom:10}}>All rights reserved - 2021</Text>
-
       </KeyboardAvoidingView>
     );
 }

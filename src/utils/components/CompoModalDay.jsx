@@ -62,7 +62,7 @@ const DialogModalDay = () => {
               loading={load} mode="contained"
               onPress={() => { 
                 setLoad(true);
-                const currentDateFormated = (dateToday.getFullYear()+"-"+("0"+dateToday.getMonth()+1).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
+                const currentDateFormated = (dateToday.getFullYear()+"-"+("0"+(dateToday.getMonth()+1)).slice(-2)+"-"+("0"+dateToday.getDate()).slice(-2));
                 classManagerDriverDay.insertNewDay(currentDateFormated, function (resultado) {
                   if (resultado.toString().includes('Update')) {
                     toasted.showToast('Sucess');

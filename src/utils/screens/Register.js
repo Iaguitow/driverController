@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Root } from "native-base";
-import { ScrollView, RefreshControl } from 'react-native';
+import { ScrollView, RefreshControl, View, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Appbar, Searchbar } from 'react-native-paper';
 //import useForceUpdate from 'use-force-update';
@@ -73,21 +73,23 @@ export default function ManagerDriver() {
           >
           </Appbar.Content>
         </Appbar.Header>
-        
-        <Searchbar
-            placeholder="Search"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Backspace') {
-                setFilterdsData(CopydsData);
-              }
-            }}
-            style={{marginBottom:20, width:'95%', alignSelf: 'center'}}
-        />
+        <View style={{marginTop:Platform.OS==='ios'?0:userModal?-200:0, position:userModal&&Platform.OS!=='ios'?"absolute":"relative"}}>
+          <Searchbar
+              placeholder="Search"
+              onChangeText={onChangeSearch}
+              value={searchQuery}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Backspace') {
+                  setFilterdsData(CopydsData);
+                }
+              }}
+              style={{marginBottom:20, width:'95%', alignSelf: 'center'}}
+          />
+        </View>
         
         <ScrollView refreshControl={
-          <RefreshControl tintColor={'white'} title={'UPDATING...'} titleColor={'white'} refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl tintColor={'white'} title={'UPDATING...'} titleColor={'white'} 
+          refreshing={refreshing} onRefresh={onRefresh}/>
         }
         scrollEventThrottle={100} 
         scrollEnabled={true} 
