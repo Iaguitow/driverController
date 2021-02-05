@@ -24,7 +24,7 @@ const AddUserAndRoute = () => {
   return (
     <Provider>
       <Portal>
-        <FAB.Group  fabStyle={{marginBottom:0,backgroundColor:'#ffcc5c'}} color='white'
+        <FAB.Group  fabStyle={{marginBottom:0,backgroundColor:'rgb(36,78,86)'}} color='white'
           open={open}
           icon={open ? 'chemical-weapon' : 'plus'}
           actions={[

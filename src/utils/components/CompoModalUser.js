@@ -21,6 +21,7 @@ import toasted from '../components/CompoToast';
 
 const ModalUserRegister = () => {
 
+    const {isSwitchOnDisablesUsers, setisSwitchOnDisablesUsers} = React.useContext(ModalContextRegister);
     const { objPeopleToedit, setobjPeopleToedit } = React.useContext(ModalContextRegister);
     const { userModal, setUserModal } = React.useContext(ModalContextRegister)
     const { dsData, setDsData } = React.useContext(ModalContextRegister);
@@ -55,7 +56,7 @@ const ModalUserRegister = () => {
     };
 
     function pullData() {
-        ClassDBUserRegister.getListPeoples(function(resultado){
+        ClassDBUserRegister.getListPeoples(isSwitchOnDisablesUsers, function(resultado){
             setDsData(resultado);
          });
     }
@@ -236,7 +237,7 @@ const ModalUserRegister = () => {
                                             valueEmail,
                                             valuePassword,
                                             keyCategory,
-                                            !isSwitchOn?'S':'N',
+                                            isSwitchOn?'S':'N',
                                             phoneNumber, function(resultado) {
                                                 if(resultado.toString().includes("Sucessfully")){
                                                     pullData();

@@ -1,12 +1,15 @@
 class ManagerUsers {
 
-    getListPeoples(callback) {
+    getListPeoples(disabledUsers,callback) {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({"disabledUsers":disabledUsers});
       
       var requestOptions = {
-        method: 'GET',
-        headers: myHeaders
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
       };
       
       return (fetch("http://172.20.10.3:3000/managerUsers/getListPeoples", requestOptions)

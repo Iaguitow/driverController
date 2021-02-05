@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Root } from "native-base";
-import { ScrollView, RefreshControl, View, Platform } from 'react-native';
+import { ScrollView, RefreshControl, View, Platform, TextInput } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Appbar, Searchbar } from 'react-native-paper';
+import { Appbar, Searchbar, Switch } from 'react-native-paper';
 //import useForceUpdate from 'use-force-update';
 
 import globalLogin from "../classes/ClassGlobal.js";
@@ -39,9 +39,16 @@ export default function ManagerDriver() {
     setDsData(filterList);
     setSearchQuery(query);  
   }
-    
+
+  const [valueActive, setValueActive] = React.useState('Disabled Users(Off):');
+  const [isSwitchOnDisablesUsers, setisSwitchOnDisablesUsers] = React.useState(false);
+  const onToggleSwitch = () => {
+    setisSwitchOnDisablesUsers(!isSwitchOnDisablesUsers)
+    !isSwitchOnDisablesUsers?setValueActive('Disabled Users(On):'):setValueActive('Disabled Users(Off):')
+  };
+
   function pullData() {
-    ClassDBUserRegister.getListPeoples(function (resultado) {
+    ClassDBUserRegister.getListPeoples(isSwitchOnDisablesUsers, function (resultado) {
       setDsData(resultado);
     });
   }
@@ -60,7 +67,7 @@ export default function ManagerDriver() {
     pullData();
     
     wait(3000).then(() => {setRefreshing(false); setFeatherActive(false);});
-  }, []);
+  }, [isSwitchOnDisablesUsers]);
 
   return (
     <Root>
@@ -68,7 +75,8 @@ export default function ManagerDriver() {
       <RegisterUserContext.Provider value={{dsData, setDsData, CopydsData, 
         setCopyDsData, FilterdsData, setFilterdsData,
         userModal, setUserModal, routeModal, setRouteModal,
-        objPeopleToedit, setobjPeopleToedit}}>
+        objPeopleToedit, setobjPeopleToedit, 
+        isSwitchOnDisablesUsers, setisSwitchOnDisablesUsers}}>
 
       <LinearGradient style={{ flex: 1 }} colors={['#182834', '#48D1CC']}>
         
@@ -91,6 +99,18 @@ export default function ManagerDriver() {
                 }
               }}
               style={{marginBottom:20, width:'95%', alignSelf: 'center'}}
+          />
+        </View>
+        <View style={{flexDirection:"row", paddingBottom:10}}>
+          <TextInput
+            editable={false}
+            value={valueActive}
+            style={{borderWidth:0, fontSize:16, paddingLeft:10, marginRight:5,color:"white" }}
+          /> 
+          <Switch
+            style={{alignSelf:"flex-start"}} 
+            value={isSwitchOnDisablesUsers} 
+            onValueChange={onToggleSwitch} 
           />
         </View>
         

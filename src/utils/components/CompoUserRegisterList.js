@@ -14,9 +14,9 @@ const CompoUserRegisterList = () => {
   React.useEffect(() => {
       setmounted(true);
   }, [])
-
-  const {featherActive, setFeatherActive} = React.useContext(ContextDrawer);
+  
   const { userModal, setUserModal } = React.useContext(ModalContextRegister);
+  const {isSwitchOnDisablesUsers, setisSwitchOnDisablesUsers} = React.useContext(ModalContextRegister);
   const { objPeopleToedit, setobjPeopleToedit } = React.useContext(ModalContextRegister);
   const { dsData, setDsData } = React.useContext(ModalContextRegister);
   const { CopydsData, setCopyDsData } = React.useContext(ModalContextRegister);
@@ -24,7 +24,7 @@ const CompoUserRegisterList = () => {
   //const [dsData, setDsData]  = React.useState('WITHOUT DATA');
 
   function pullData(){
-    ManagerUsers.getListPeoples(function(resultado){
+    ManagerUsers.getListPeoples(isSwitchOnDisablesUsers,function(resultado){
       setDsData(resultado);
       setCopyDsData(resultado);
       setFilterdsData(resultado);
@@ -35,7 +35,7 @@ const CompoUserRegisterList = () => {
   useFocusEffect(
     React.useCallback(() => {
       pullData();
-    }, [])
+    }, [isSwitchOnDisablesUsers])
   );
 
   if (!mounted) {
