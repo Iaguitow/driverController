@@ -11,6 +11,7 @@ import globalLogin from "../classes/ClassGlobal.js";
 import DialogDay from '../components/CompoModalDay';
 import DialogDayWeek from '../components/CompoModalWeek';
 import DialogContext from "../classes/ModalContext.js";
+import ContextDrawer from '../classes/ContextDrawer';
 import classManagerDriverDay from "../classes/ClassDBDriversDay.js"
 import ClassUtils from "../classes/ClassUtils.js"
 
@@ -19,6 +20,8 @@ export default function ManagerDriver() {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, [])
+
+  const {featherActive, setFeatherActive} = React.useContext(ContextDrawer);
 
   const [value, setValue] = useState(false);
   const [valueWeek, setValueWeek] = useState(false);
@@ -41,8 +44,9 @@ export default function ManagerDriver() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    setFeatherActive(true);
     pullData();
-    wait(3000).then(() => setRefreshing(false));
+    wait(3000).then(() => {setRefreshing(false); setFeatherActive(false);});
   }, []);
 
 

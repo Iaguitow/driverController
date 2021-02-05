@@ -9,6 +9,17 @@ const AddUserAndRoute = () => {
 
   const { userModal, setUserModal } = React.useContext(ModalContextRegister);
   const { routeModal, setRouteModal } = React.useContext(ModalContextRegister);
+  const { objPeopleToedit, setobjPeopleToedit } = React.useContext(ModalContextRegister);
+
+  const obj = {
+    "idpeople":0,
+    "active": "",
+    "email": "",
+    "fk_idcategory": "2",
+    "name": "",
+    "password": "",
+    "phonenumber": "",
+  }
 
   return (
     <Provider>
@@ -20,7 +31,10 @@ const AddUserAndRoute = () => {
             {
               icon: 'account-multiple-plus',
               label: 'Users',
-              onPress: () => setUserModal(true),
+              onPress: () => {
+                setobjPeopleToedit(obj);
+                setUserModal(true)
+              },
             },
             {
               icon: 'routes-clock',

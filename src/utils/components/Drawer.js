@@ -15,6 +15,7 @@ import Register from '../screens/Register';
 import Configuration from '../screens/Configuration';
 import Login from '../screens/Login';
 import * as RootNavigation from '../classes/RootNavigation';
+import ContextDrawer from '../classes/ContextDrawer';
 
 import globalLogin from "../classes/ClassGlobal.js"
 
@@ -22,15 +23,17 @@ const Drawers = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const Screens = ({navigation, style}) => {  
-  
+  const [featherActive, setFeatherActive] = React.useState(false);
+
     return(
+      <ContextDrawer.Provider value={{ featherActive, setFeatherActive }}>
       <Animated.View style={[{flex:1}, style]}> 
         <Stack.Navigator
             screenOptions={{
                 headerTransparent: true,
                 headerTitle: null,
                 headerLeft: () => (
-                    <TouchableOpacity onPress ={() => navigation.openDrawer()}>
+                    <TouchableOpacity disabled={featherActive} onPress ={() => navigation.openDrawer()}>
                         <Feather name="menu" size={30} color="white" style={{width:30, height:30, left:5, bottom:6, top:3 }} />
                     </TouchableOpacity>
                 )
@@ -41,7 +44,8 @@ const Screens = ({navigation, style}) => {
             <Stack.Screen name="Configuration" component={Configuration}/>
             <Stack.Screen name="Login" component={Login}/>
         </Stack.Navigator>   
-     </Animated.View>   
+     </Animated.View> 
+     </ContextDrawer.Provider>  
     );
 };
 

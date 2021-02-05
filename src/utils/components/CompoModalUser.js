@@ -21,10 +21,12 @@ import toasted from '../components/CompoToast';
 
 const ModalUserRegister = () => {
 
+    const { objPeopleToedit, setobjPeopleToedit } = React.useContext(ModalContextRegister);
     const { userModal, setUserModal } = React.useContext(ModalContextRegister)
     const { dsData, setDsData } = React.useContext(ModalContextRegister);
     const [load, setLoad] = React.useState(false);
 
+    const [keyDialog, setkeyDialog] = React.useState(0);
     const [valueName, setValueName] = React.useState("");
     const [valueEmail, setValueEmail] = React.useState("");
     const [valuePassword, setValuePassword] = React.useState("");
@@ -60,14 +62,27 @@ const ModalUserRegister = () => {
 
     useFocusEffect(
         React.useCallback(() => {
+            if(userModal){
+                setValueName(objPeopleToedit.name);
+                setValueEmail(objPeopleToedit.email);
+                setValuePassword(objPeopleToedit.password);
+                setValuePhone(objPeopleToedit.phonenumber);
+                setValueActive(objPeopleToedit.active==""||objPeopleToedit.active=="N"?'Active(Off):':'Active(On):');
+                setIsSwitchOn(objPeopleToedit.active==""||objPeopleToedit.active=="N"?false:true);
+                setKeyCategory(objPeopleToedit.fk_idcategory.toString());
+                setkeyDialog(keyDialog+1);
+            }
             pullDataCategory();
-        }, [])
+        }, [userModal])
     );
     
     return (
         <Provider>
             <Portal>
-                <Dialog style={{}} visible={userModal} onDismiss={() => { setUserModal(false) }}>
+                <Dialog key={keyDialog} style={{}} visible={userModal} onDismiss={() => {
+                    setUserModal(false);
+                    
+                    }}>
                     <Dialog.Title>Register New User</Dialog.Title>
                     <Divider />
 
@@ -75,7 +90,7 @@ const ModalUserRegister = () => {
                         <View>
                         <Paragraph>Personal Data:</Paragraph>
                         <TextInput
-                            label={'Name: '}
+                            label={'Name*: '}
                             type="text"
                             defaultValue={valueName}
                             onEndEditing={(textName) => {setValueName(textName.nativeEvent.text);}}
@@ -87,7 +102,7 @@ const ModalUserRegister = () => {
                                 }
                             }} />
                         <TextInput
-                            label={'E-mail: '}
+                            label={'E-mail*: '}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             defaultValue={valueEmail}
@@ -99,44 +114,34 @@ const ModalUserRegister = () => {
                                     primary: '#48D1CC', underlineColor: '#48D1CC'
                                 }
                             }} />
-                        <TextInput
-                            label={'Phone Number: '}
-                            type="text"
-                            defaultValue={phoneNumber}
-                            onEndEditing={(textPhone) => {setValuePhone(textPhone.nativeEvent.text);}}
-                            keyboardType="numeric"
-                            maxLength={11}
-                            style={{ backgroundColor: 'transparent', width: "100%" }}
-                            theme={{
-                                colors: {
-                                    placeholder: 'black', text: 'black',
-                                    primary: '#48D1CC', underlineColor: '#48D1CC'
-                                }
-                            }} />
                         <View style={{ flexDirection: 'row', padding: 0 }}>
                             <TextInput
-                                label={'Password: '}
-                                defaultValue={valuePassword}
-                                onEndEditing={(textPassword) => {setValuePassword(textPassword.nativeEvent.text);}}
-                                maxLength={15}
-                                style={{ backgroundColor: 'transparent', width: "50%" }}
+                                label={'Phone Number*: '}
+                                type="text"
+                                defaultValue={phoneNumber}
+                                onEndEditing={(textPhone) => {setValuePhone(textPhone.nativeEvent.text);}}
+                                keyboardType="numeric"
+                                maxLength={11}
+                                style={{ backgroundColor: 'transparent', width: "48%" }}
                                 theme={{
                                     colors: {
                                         placeholder: 'black', text: 'black',
                                         primary: '#48D1CC', underlineColor: '#48D1CC'
                                     }
                                 }} />
-                            <TextInputNative
-                                editable={false}
-                                value={valueActive}
-                                style={{alignSelf:"center", fontSize:16, paddingRight:15, paddingLeft:10 }}
-                                > 
-                            </TextInputNative>
-                            <Switch
-                                style={{alignSelf:"center" }} 
-                                value={isSwitchOn} 
-                                onValueChange={onToggleSwitch} 
-                            />
+                            <TextInput
+                                label={'Password*: '}
+                                defaultValue={valuePassword}
+                                onEndEditing={(textPassword) => {setValuePassword(textPassword.nativeEvent.text);}}
+                                maxLength={15}
+                                style={{ backgroundColor: 'transparent', width: "48%",marginLeft:8 }}
+                                theme={{
+                                    colors: {
+                                        placeholder: 'black', text: 'black',
+                                        primary: '#48D1CC', underlineColor: '#48D1CC'
+                                    }
+                                }} />
+
                         </View>
                         <View style={{ flexDirection: 'row', padding: 0 }}>
                             <TextInputNative
@@ -165,30 +170,76 @@ const ModalUserRegister = () => {
 
                     <Divider />
                     <Dialog.Actions>
-                        <Text style={{ marginRight: '30%' }}>
-                            Today: {new Date().toString().substr(4, 12)}
-                        </Text>
+                        <View style={{flexDirection: 'row',marginRight:"25%"}}>
+                            <TextInputNative
+                                editable={false}
+                                value={valueActive}
+                                style={{alignSelf:"center", fontSize:16, paddingRight:15, paddingLeft:10 }}
+                                > 
+                            </TextInputNative>
+                            <Switch
+                                style={{alignSelf:"center" }} 
+                                value={isSwitchOn} 
+                                onValueChange={onToggleSwitch} 
+                            />
+                        </View>
                         <Button color={'#48D1CC'} icon="content-save-all" labelStyle={{ color: 'white' }}
                             loading={load} mode="contained"
                             onPress={() => {
                                 setLoad(true);
                                 if(ClassUtils.validateEmail(valueEmail)){
-                                    ClassDBUserRegister.insertNewUser(
-                                        valueName,
-                                        valueEmail,
-                                        valuePassword,
-                                        keyCategory,
-                                        !isSwitchOn?'S':'N',
-                                        phoneNumber, function(resultado) {
+                                    if(objPeopleToedit.idpeople!=0){
+                                        ClassDBUserRegister.updateUser(
+                                            valueName,
+                                            valueEmail,
+                                            valuePassword,
+                                            keyCategory,
+                                            isSwitchOn?'S':'N',
+                                            phoneNumber, objPeopleToedit.idpeople, function(resultado) {
                                                 if(resultado.toString().includes("Sucessfully")){
                                                     pullData();
-                                                    setValueName("");
-                                                    setValueEmail("");
-                                                    setValuePassword("");
-                                                    setValuePhone("");
-                                                    setValueActive('Active(Off):');
-                                                    setIsSwitchOn(false);
-                                                    setKeyCategory("2");
+                                                    setUserModal(false);
+                                                    toasted.showToast("Refresh");
+                                                    
+                                                }else{
+                                                    alert(resultado);
+
+                                                }
+                                            setLoad(false);
+                                        });
+
+                                    }else{
+
+                                        if(valueName==""){
+                                            alert("Name Required.");
+                                            setLoad(false);
+                                            return null;
+
+                                        }else if(valueEmail==""){
+                                            alert("E-mail Required.");
+                                            setLoad(false);
+                                            return null;
+
+                                        }else if(valuePassword==""){
+                                            alert("Password Required.");
+                                            setLoad(false);
+                                            return null;
+
+                                        }else if(phoneNumber==""){
+                                            alert("Phone Number Required.");
+                                            setLoad(false);
+                                            return null;
+                                        }
+
+                                        ClassDBUserRegister.insertNewUser(
+                                            valueName,
+                                            valueEmail,
+                                            valuePassword,
+                                            keyCategory,
+                                            !isSwitchOn?'S':'N',
+                                            phoneNumber, function(resultado) {
+                                                if(resultado.toString().includes("Sucessfully")){
+                                                    pullData();
                                                     setUserModal(false);
                                                     toasted.showToast("Sucess");
                                                     
@@ -198,11 +249,13 @@ const ModalUserRegister = () => {
                                                 }
                                             setLoad(false);
                                         });
+                                    }
                                 }
                                 else{
                                     alert("Invalid E-mail, try another one.");
                                     setLoad(false);
                                 }
+                                setLoad(false);
                             }}
                         >
                             SAVE

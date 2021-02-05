@@ -12,14 +12,18 @@ import ClassDBUserRegister from "../classes/ClassDBUserRegister.js"
 import CompoUserRegisterList from "../components/CompoUserRegisterList.js";
 import AddUserAndRoute from "../components/CompoFabGroupAddUserAndRoute";
 import ModalAddUser from "../components/CompoModalUser";
+import ContextDrawer from '../classes/ContextDrawer';
 
 export default function ManagerDriver() {
+
+  const {featherActive, setFeatherActive} = React.useContext(ContextDrawer);
 
   //STATES FOR MODAL
   const [userModal, setUserModal] = useState(false);
   const [routeModal, setRouteModal] = useState(false);
 
   //STATES FOR DATA
+  const [objPeopleToedit, setobjPeopleToedit] = useState('');
   const [dsData, setDsData] = useState('');
   const [CopydsData, setCopyDsData] = useState('');
   const [FilterdsData, setFilterdsData] = useState('');
@@ -51,9 +55,11 @@ export default function ManagerDriver() {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    setRefreshing(true)
+    setFeatherActive(true);
     pullData();
-    wait(3000).then(() => setRefreshing(false));
+    
+    wait(3000).then(() => {setRefreshing(false); setFeatherActive(false);});
   }, []);
 
   return (
@@ -61,7 +67,8 @@ export default function ManagerDriver() {
       
       <RegisterUserContext.Provider value={{dsData, setDsData, CopydsData, 
         setCopyDsData, FilterdsData, setFilterdsData,
-        userModal, setUserModal, routeModal, setRouteModal}}>
+        userModal, setUserModal, routeModal, setRouteModal,
+        objPeopleToedit, setobjPeopleToedit}}>
 
       <LinearGradient style={{ flex: 1 }} colors={['#182834', '#48D1CC']}>
         
@@ -73,7 +80,7 @@ export default function ManagerDriver() {
           >
           </Appbar.Content>
         </Appbar.Header>
-        <View style={{marginTop:Platform.OS==='ios'?0:userModal?-200:0, position:userModal&&Platform.OS!=='ios'?"absolute":"relative"}}>
+        <View style={{marginTop:Platform.OS==='ios'?0:userModal?-500:0, position:userModal&&Platform.OS!=='ios'?"absolute":"relative"}}>
           <Searchbar
               placeholder="Search"
               onChangeText={onChangeSearch}

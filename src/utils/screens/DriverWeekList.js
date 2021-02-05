@@ -5,8 +5,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Appbar } from 'react-native-paper';
 //import useForceUpdate from 'use-force-update';
 
-import globalLogin from "../classes/ClassGlobal.js";
 import ClassUtils from "../classes/ClassUtils.js"
+import globalLogin from "../classes/ClassGlobal.js";
+import ContextDrawer from '../classes/ContextDrawer';
 import DataWeekContext from "../classes/ModalContextWeek.js";
 import CompoDriversWeek from "../components/CompoDriversWeek";
 import ManagerListDriverWeek from "../classes/ClassDBDriversWeek.js"
@@ -16,6 +17,8 @@ export default function ManagerDriver() {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, [])
+
+  const {featherActive, setFeatherActive} = React.useContext(ContextDrawer);
 
   const [dtData, setDtData] = useState(false);
   const [dateToday, ] = useState(new Date());
@@ -36,8 +39,9 @@ export default function ManagerDriver() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    setFeatherActive(true);
     pullData();
-    wait(3000).then(() => setRefreshing(false));
+    wait(3000).then(() => {setRefreshing(false); setFeatherActive(false);});
   }, []);
 
   return (
