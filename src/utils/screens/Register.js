@@ -12,6 +12,7 @@ import ClassDBUserRegister from "../classes/ClassDBUserRegister.js"
 import CompoUserRegisterList from "../components/CompoUserRegisterList.js";
 import AddUserAndRoute from "../components/CompoFabGroupAddUserAndRoute";
 import ModalAddUser from "../components/CompoModalUser";
+import ModalAddRoute from "../components/CompoModalRoutes";
 import ContextDrawer from '../classes/ContextDrawer';
 
 export default function ManagerDriver() {
@@ -125,9 +126,8 @@ export default function ManagerDriver() {
           <CompoUserRegisterList/>
         </ScrollView >
         <AddUserAndRoute/>
-
         <ModalAddUser/>
-        
+        <ModalAddRoute/>
       </LinearGradient>
       </RegisterUserContext.Provider>
     </Root>

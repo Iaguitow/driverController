@@ -1,12 +1,13 @@
 //FEATURES
 import React, { useContext } from 'react';
-import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, Alert} from 'react-native';
+import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, Alert, Platform} from 'react-native';
 import { createDrawerNavigator,  DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator} from '@react-navigation/stack';
 import { Drawer } from 'react-native-paper';
 import Animated, { color } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, AntDesign } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 //SCREENS
 import ManagerDriverDay from '../screens/ManagerDriverDay';
@@ -16,7 +17,6 @@ import Configuration from '../screens/Configuration';
 import Login from '../screens/Login';
 import * as RootNavigation from '../classes/RootNavigation';
 import ContextDrawer from '../classes/ContextDrawer';
-
 import globalLogin from "../classes/ClassGlobal.js"
 
 const Drawers = createDrawerNavigator();
@@ -52,15 +52,49 @@ const Screens = ({navigation, style}) => {
 const DrawerContent = props => {
 
   const refresh = useContext(() => this.refresh());
+  const [image, setImage] = React.useState(null);
+
+  function ImagePickers() {
+    
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })
+
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        //base64:true,
+        aspect: [1, 1],
+        quality: 0,
+      });
+  
+      console.log(result);
+  
+      if (!result.cancelled) {
+        setImage(result.uri);
+      }
+    };
+  
+    pickImage();
+  }
 
     return(
         
         <DrawerContentScrollView {...props} scrollEnabled={false} >
             <Drawer.Section style={{borderBottomColor: 'white',borderBottomWidth: 0.5, marginLeft:"16%"}}>
                 <View style={{flex:0.4, margin:20, backgroundColor:"transparent"}}>
-                    <Image 
-                        source={require('../images/face-Img.jpg')}
-                        style={{width:120, height:120, borderRadius:70 }} />
+                  <TouchableOpacity onPress={() => {ImagePickers();}}>
+                    <Image
+                        source={image!=null?{ uri: image }:require('../images/face-Img.jpg')}
+                        style={{width:120, height:120, borderRadius:70 }} 
+                    />
+                  </TouchableOpacity>
                     <Text style={{ marginTop:10, fontSize:20, color:'white', marginLeft:'3%'}}> {globalLogin.isLogInName} </Text>
                     <Text style={{ fontSize:12, color:'white', marginLeft:'4%'}}> {globalLogin.isLogInCategory} </Text>
                 </View>
