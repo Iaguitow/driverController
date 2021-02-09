@@ -1,13 +1,13 @@
 //FEATURES
 import React, { useContext } from 'react';
-import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, Alert, Platform} from 'react-native';
+import { Image, Text, View, TouchableOpacity, StyleSheet, Dimensions, Alert} from 'react-native';
 import { createDrawerNavigator,  DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { createStackNavigator} from '@react-navigation/stack';
 import { Drawer } from 'react-native-paper';
 import Animated, { color } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, AntDesign } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
+import { Buffer } from "buffer";
 
 //SCREENS
 import ManagerDriverDay from '../screens/ManagerDriverDay';
@@ -18,6 +18,9 @@ import Login from '../screens/Login';
 import * as RootNavigation from '../classes/RootNavigation';
 import ContextDrawer from '../classes/ContextDrawer';
 import globalLogin from "../classes/ClassGlobal.js"
+import ClassDBusers from "../classes/ClassDBUserRegister.js"
+import ClassUtils from "../classes/ClassUtils.js"
+import getImage from "../classes/ClassImage.js"
 
 const Drawers = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -54,44 +57,30 @@ const DrawerContent = props => {
   const refresh = useContext(() => this.refresh());
   const [image, setImage] = React.useState(null);
 
-  function ImagePickers() {
-    
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })
+  React.useEffect(()=>{
+    const imageProfile = 'data:image/png;base64,'+globalLogin.isLogInPhoto
+    setImage(imageProfile);
 
-    const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        //base64:true,
-        aspect: [1, 1],
-        quality: 0,
-      });
-  
-      console.log(result);
-  
-      if (!result.cancelled) {
-        setImage(result.uri);
-      }
-    };
-  
-    pickImage();
-  }
+  },[]);
 
     return(
-        
         <DrawerContentScrollView {...props} scrollEnabled={false} >
             <Drawer.Section style={{borderBottomColor: 'white',borderBottomWidth: 0.5, marginLeft:"16%"}}>
                 <View style={{flex:0.4, margin:20, backgroundColor:"transparent"}}>
-                  <TouchableOpacity onPress={() => {ImagePickers();}}>
+
+                  <TouchableOpacity onPress={() => {getImage(function (imagePicked) {
+                    //const blob = Buffer(imagePicked.base64, "base64").toString("binary"); -> TO BASE64
+                    //const base64 = Buffer(blob, "binary").toString("base64"); -> TO BASE64
+                    ClassDBusers.insertNewUserPhoto(globalLogin.isLogInID, imagePicked.base64, function (inserted){
+                      var imgBased64 = 'data:image/png;base64,'+imagePicked.base64
+                      setImage(imgBased64);
+                    });
+
+                  })}}>
+
                     <Image
                         source={image!=null?{ uri: image }:require('../images/face-Img.jpg')}
+                        //source={require('../images/face-Img.jpg')}
                         style={{width:120, height:120, borderRadius:70 }} 
                     />
                   </TouchableOpacity>

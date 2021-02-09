@@ -80,6 +80,26 @@ class ManagerUsers {
       ).catch(error => {console.log('error', error); return error}));
     }
 
+    insertNewUserPhoto(idUser,photoBlob,callback) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      
+      var raw = JSON.stringify({"photoBlob":photoBlob,"idUser":idUser});
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
+      };
+      
+      return (fetch("http://172.20.10.3:3000/managerUsers/insertNewUserPhoto", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          callback(result);
+        }
+      ).catch(error => {console.log('error', error); return error}));
+    }
+
   }
   
 var manager = new ManagerUsers();

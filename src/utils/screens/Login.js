@@ -20,11 +20,14 @@ async function sendRequestLogin(email,password){
     .then(response => response.text())
     .then(
       result => {
-        if(result.toString().includes("Incorrect")?false == true:JSON.parse(result)[0].email == email){
-          globalLogin.isLogInID = JSON.parse(result)[0].idpeople;
-          globalLogin.isLogInEmail = JSON.parse(result)[0].email;
-          globalLogin.isLogInName = JSON.parse(result)[0].name;
-          globalLogin.isLogInCategory = JSON.parse(result)[0].namecategory;
+
+        if(result.toString().includes("Incorrect")?false == true:JSON.parse(result).email == email){
+          
+          globalLogin.isLogInPhoto = JSON.parse(result).profilephoto;
+          globalLogin.isLogInID = JSON.parse(result).idpeople;
+          globalLogin.isLogInEmail = JSON.parse(result).email;
+          globalLogin.isLogInName = JSON.parse(result).name;
+          globalLogin.isLogInCategory = JSON.parse(result).namecategory;
           
         }
         else {

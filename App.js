@@ -2,6 +2,13 @@ import React from 'react';
 import AppLoading from 'expo-app-loading'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import {decode, encode} from 'base-64'
+if (!global.btoa) {
+    global.btoa = encode;
+}
+if (!global.atob) {
+    global.atob = decode;
+}
 
 // Packages
 import { NavigationContainer } from '@react-navigation/native';

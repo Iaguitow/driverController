@@ -45,6 +45,7 @@ const CompoUserRegisterList = () => {
   const arrayPeople = [];
   for (var i = 0, ii = dsData.length; i < ii; i++) {
     arrayPeople.push({
+      profilephoto: dsData[i].profilephoto,
       idpeople: dsData[i].idpeople,
       name: dsData[i].name,
       email: dsData[i].email,
@@ -74,7 +75,7 @@ const CompoUserRegisterList = () => {
           }}
 
           left={props => <Avatar.Image {...props} style={{backfaceVisibility:'false',backgroundColor:'transparent'}} 
-          size={60} source={require('../images/face-Img.jpg')} />}
+          size={60} source={obj.profilephoto!=null?{ uri: 'data:image/png;base64,'+obj.profilephoto }:require('../images/face-Img.jpg')} />}
 
           right={props => <IconButton {...props} size={35}
             color={'#48D1CC'} icon="phone-in-talk" onPress={() => { ClassUtils.callNumber(obj.phonenumber); }} />}
@@ -82,6 +83,7 @@ const CompoUserRegisterList = () => {
           onPress={() => {
             setobjPeopleToedit(obj);
             setUserModal(true);
+            
           }}
         />
       </List.Section>
